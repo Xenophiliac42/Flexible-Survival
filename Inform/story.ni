@@ -12,7 +12,7 @@ Use MAX_PROP_TABLE_SIZE of 51000000.
 use MAX_STATIC_DATA of 12500000.
 Use MAX_OBJ_PROP_COUNT of 1280.
 use MAX_SYMBOLS of 13000000. ["Compiler finished with code 10"]
-use MAX_NUM_STATIC_STRINGS of 150000. [ Code 10 ]
+use MAX_NUM_STATIC_STRINGS of 160000. [ Code 10 ]
 use SYMBOLS_CHUNK_SIZE of 25000. [ Code 10 ]
 use ALLOC_CHUNK_SIZE of 1450000.
 use MAX_DICT_ENTRIES of 15000.
@@ -3522,6 +3522,7 @@ To say blockquote-style:
 To say input-style:
 	(- glk_set_style(style_Input); -)
 
+[
 Table of Common Color Values [(continued)]
 glulx color value	assigned number
 g-pure-blue	255		[== $0000FF] 
@@ -3536,8 +3537,10 @@ g-pure-yellow	16776960		[== $FFFF00]
 g-pure-magenta	16711935		[== $FF00FF]
 g-pure-red	16711680		[== $FF0000]
 [names can be changed if desired, also need to change matching name in table below.  choose color in hex, then convert to decimal for assigned number.]
+]
 
 Table of User Styles (continued)
+[
 style name	justification	obliquity	indentation	first-line indentation	boldness	fixed width	relative size	glulx color
 special-style-1	--	--	--	--	bold-weight	--	1	g-dark-green
 special-style-2	--	--	--	--	bold-weight	--	1	g-medium-red
@@ -3553,6 +3556,12 @@ bold-style	--	--	--	--	--	--	--	--[allows redefining of bold style]
 [blockquote, input, and fixed letter appear to be unused.  they could be redefined as desired for more colors/formating.]
 [alert, header, and note are used for a few game functions.  if you wanted to change those you could]
 [italics and bold are currently in a variety of places.  just a few italics, but bold is all over the place.  be aware if you choose to change them]
+]
+style name (a glulx text style)	background color (a text)	color (a text)	first line indentation (a number)	fixed width (a truth state)	font weight (a font weight)	indentation (a number)	italic (a truth state)	justification (a text justification)	relative size (a number)	reversed (a truth state)
+special-style-1	--	"#00CC00"	--	--	bold-weight	--	--	--	--	--
+special-style-2	--	"#CC0000"	--	--	bold-weight	--	--	--	--	--
+
+
 
 Part 3 - Item Code
 
@@ -5114,12 +5123,13 @@ This is the turnpass rule:
 			otherwise:				[MPreg]
 				say "Your [bodytype of player] belly protrudes in a firm dome from your [if cocks of player > 0]male[otherwise]neuter[end if] pregnancy, full with [if snakehijack is true][one of]your serpentine hijacker[or]the illegitimate occupant[or]the sneaky snake[as decreasingly likely outcomes][otherwise]growing life[end if][if snakeocc > 1]s[end if] which will soon emerge into the world.  Somehow, perhaps due to the nanites, you don't feel at all hindered despite being bloated.";
 			if a random chance of 1 in 10 succeeds and ( cunts of player > 0 or breast size of player > 0 ):
-				increase breast size of player by 1;
-				follow breast descr rule;
-				if cunts of player > 0:
-					say "Your breasts feel especially tender, swollen with your condition, now [breast size desc of player], the mammary flesh stretched lightly.  Pinching your nipples causes a little of the milk to feed the child growing inside you to dribble out.";
-				otherwise:
-					say "Your breasts feel especially tender and you are surprised to find them swelling larger despite being [if cocks of player > 0]male[otherwise]neuter[end if], now [breast size desc of player] breasts on your [bodytype of player] body.  Pinching your nipples causes a little of the milk to feed the child growing inside you to dribble out.";
+				if "Flat Chested" is not listed in feats of player:
+					increase breast size of player by 1;
+					follow breast descr rule;
+					if cunts of player > 0:
+						say "Your breasts feel especially tender, swollen with your condition, now [breast size desc of player], the mammary flesh stretched lightly.  Pinching your nipples causes a little of the milk to feed the child growing inside you to dribble out.";
+					otherwise:
+						say "Your breasts feel especially tender and you are surprised to find them swelling larger despite being [if cocks of player > 0]male[otherwise]neuter[end if], now [breast size desc of player] breasts on your [bodytype of player] body.  Pinching your nipples causes a little of the milk to feed the child growing inside you to dribble out.";
 		otherwise if gestation of child is less than 10:
 			if cunts of player > 0:
 				say "Your [bodydesc of player] body is somewhat rounded with the effects of [if ovipregnant is true]what feels like an egg growing inside you[otherwise]your oncoming pregnancy[end if].  It is progressing with worrying speed, but a warm sense of fulfillment keeps fear at bay.";
@@ -5127,12 +5137,13 @@ This is the turnpass rule:
 				say "Your [bodydesc of player] body is somewhat enlarged by the effects of your unusual pregnancy.  It is progressing with worrying speed, but a strange sense of fulfillment keeps fear at bay.";
 			increase morale of player by 1;
 			if a random chance of 1 in 20 succeeds and ( cunts of player > 0 or breast size of player > 0 ):
-				increase breast size of player by 1;
-				follow breast descr rule;
-				if cunts of player > 0:
-					say "Your breasts feel especially tender, swollen with your condition, now [breast size desc of player], the mammary flesh stretched lightly.";
-				otherwise:
-					say "Your breasts feel especially tender and you are surprised to find them swelling larger despite being [if cocks of player > 0]male[otherwise]neuter[end if], now [breast size desc of player] breasts on your [bodytype of player] body.";
+				if "Flat Chested" is not listed in feats of player:
+					increase breast size of player by 1;
+					follow breast descr rule;
+					if cunts of player > 0:
+						say "Your breasts feel especially tender, swollen with your condition, now [breast size desc of player], the mammary flesh stretched lightly.";
+					otherwise:
+						say "Your breasts feel especially tender and you are surprised to find them swelling larger despite being [if cocks of player > 0]male[otherwise]neuter[end if], now [breast size desc of player] breasts on your [bodytype of player] body.";
 		otherwise if gestation of child is less than 30:
 			if a random chance of 1 in 2 succeeds:
 				if cunts of player > 0:
@@ -5507,6 +5518,8 @@ This is the self examine rule:
 			say "  [descmod of x][run paragraph on]";
 	if "Angie's Mate" is listed in feats of player:
 		say "  Thin lines of healed claw-marks run down your back, marking you as Angie's mate.";
+	if "Boghrim's Mark" is listed in feats of player:
+		say "  Two small scars from Boghrim's tusks mark your shoulder, a reminder of the first time the big orc fucked you.";
 	if weapon object of player is not journal:
 		say "  You are carrying a/an [weapon object of player] just in case of trouble";
 		if weapon object of player is unwieldy:
@@ -6838,6 +6851,7 @@ Include Pretty Kitty by Xenophiliac.
 Include Santa Claws by Wahn.
 Include Erica by Wahn.
 Include Egyptian Wing by Xenophiliac.
+Include Wild Mustang by Wahn.
 
 [Pets]
 Include Gryphon Companion by Sarokcat.
